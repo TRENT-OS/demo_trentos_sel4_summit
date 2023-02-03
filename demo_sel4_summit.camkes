@@ -1,0 +1,52 @@
+/*
+ * Demo seL4 Summit
+ *
+ * Copyright (C) 2022, HENSOLDT Cyber GmbH
+ */
+
+import <std_connector.camkes>;
+
+import "components/Client/Client.camkes";
+import "components/Server/Server.camkes";
+
+#include "system_config.h"
+
+#include "RamDisk/RamDisk.camkes"
+RamDisk_COMPONENT_DEFINE(RamDisk)
+
+#include "EntropySource/camkes/EntropySource.camkes"
+EntropySource_COMPONENT_DEFINE(EntropySource)
+
+assembly {
+    composition {
+        component Client client;
+        component Server server;
+
+        //----------------------------------------------------------------------
+        // Storage
+        //----------------------------------------------------------------------
+        component RamDisk ramDisk;
+
+        RamDisk_INSTANCE_CONNECT_CLIENT(
+            ramDisk,
+            server.storage_rpc,
+            server.storage_dp)
+
+        //----------------------------------------------------------------------
+        // EntropySource
+        //----------------------------------------------------------------------
+        component EntropySource entropySource;
+
+        EntropySource_INSTANCE_CONNECT_CLIENT(
+            entropySource,
+            server.entropy_rpc,
+            server.entropy_dp)
+
+        connection seL4RPCCall call(from client.if_client, to server.if_server);
+        connection seL4SharedData data(from client.buf_client, to server.buf_server);
+    }
+
+    configuration {
+        ramDisk.storage_size = 2 * 1024 * 1024;
+    }
+}

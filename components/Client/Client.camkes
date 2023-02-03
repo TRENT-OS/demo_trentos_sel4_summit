@@ -1,0 +1,14 @@
+/*
+ * Client component
+ *
+ * Copyright (C) 2022, HENSOLDT Cyber GmbH
+ */
+
+import "../../interfaces/if_Transfer.camkes";
+
+component Client {
+    control;
+
+    uses if_Transfer if_client;
+    dataport Buf buf_client;
+}

@@ -1,0 +1,26 @@
+/*
+ * Server component
+ *
+ * Copyright (C) 2022, HENSOLDT Cyber GmbH
+ */
+
+import "../../interfaces/if_Transfer.camkes";
+import <if_OS_Storage.camkes>;
+import <if_OS_Entropy.camkes>;
+
+component Server {
+    //-------------------------------------------------
+    // Client
+    provides if_Transfer if_server;
+    dataport Buf buf_server;
+
+    //-------------------------------------------------
+    // RamDisk
+	uses if_OS_Storage storage_rpc;
+    dataport Buf storage_dp;
+
+    //-------------------------------------------------
+    // EntropySource
+	uses if_OS_Entropy entropy_rpc;
+    dataport Buf entropy_dp;
+}

@@ -1,0 +1,9 @@
+/*
+ * if_Transfer Interface
+ *
+ * Copyright (C) 2022, HENSOLDT Cyber GmbH
+ */
+
+procedure if_Transfer {
+    void reverse(inout dataport_ptr_t ptr);
+}
